@@ -1,4 +1,4 @@
-name: Test GitHub Actions
+name: Mirror to Bitbucket
 
 on:
   push:
@@ -8,12 +8,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  mirror:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test workflow
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
         run: |
-          echo "GitHub Actions is working"
-          echo "Branch: ${{ github.ref_name }}"
-          echo "Commit: ${{ github.sha }}"
+          git config user.name "GitHub Mirror Bot"
+          git config user.email "github-mirror-bot@users.noreply.github.com"
+
+      - name: Push to Bitbucket
+        env:
+          BITBUCKET_TOKEN: ${{ secrets.BITBUCKET_TOKEN }}
+        run: |
+          git remote add bitbucket \
+            "https://x-token-auth:${BITBUCKET_TOKEN}@bitbucket.org/lqhuy125/qmk_firmware.git"
+
+          git push bitbucket \
+            HEAD:add-more-led-on-silikka54
