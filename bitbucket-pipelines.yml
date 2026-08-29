@@ -1,0 +1,14 @@
+image: atlassian/default-image:4
+
+clone:
+  depth: full
+
+pipelines:
+  branches:
+    add-more-led-on-silikka54:
+      - step:
+          name: Test GitHub SSH
+          script:
+            - echo "Testing SSH connection to GitHub..."
+            - ssh -T git@github.com || true
+            - echo "SSH test completed"
