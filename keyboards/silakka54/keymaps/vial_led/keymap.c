@@ -3,6 +3,8 @@
 
 #include QMK_KEYBOARD_H
 
+#include "led_custom.h"
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [0] = LAYOUT(
@@ -15,8 +17,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [1] = LAYOUT(
         KC_GRV,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                              KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
         KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                            KC_PGUP, KC_PGDN, KC_HOME, KC_END,  KC_DEL,  KC_F12,
-        KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                            KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_LBRC, KC_RBRC,
-        KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                            KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+        KC_TRNS,  RGB_TOGGLE, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,                         KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_LBRC, KC_RBRC,
+        KC_TRNS,  RGB_BRI_DEC, RGB_BRI_INC, RGB_SPD_DEC, RGB_SPD_INC, QK_BOOT,            KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                                             KC_TRNS, KC_TRNS, KC_TRNS,           KC_TRNS,  KC_TRNS,  KC_TRNS
     ),
     [2] = LAYOUT(
@@ -63,11 +65,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
-const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
+/* const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
     LAYOUT(
         'L', 'L', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R', 'R',
         'L', 'L', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R', 'R',
         'L', 'L', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R', 'R',
         'L', 'L', 'L', 'L', 'L', 'L',  'R', 'R', 'R', 'R', 'R', 'R',
                        'L', 'L', 'L',  'R', 'R', 'R'
-    );
+    ); */
+
+void keyboard_post_init_user(void)
+{
+    led_init_user();
+}
