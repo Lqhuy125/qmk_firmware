@@ -72,7 +72,84 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
                        'L', 'L', 'L',  'R', 'R', 'R'
     );
 
-enum rgb_layers {
+#ifdef RGB_MATRIX_ENABLE
+
+#ifdef RGB_MATRIX_ENABLE
+
+led_config_t g_led_config = {
+    {
+        {22,23,24,25,26,27},
+        {21,20,19,18,17,16},
+        {10,11,12,13,14,15},
+        { 9, 8, 7, 6, 5, 4},
+        {NO_LED, NO_LED, NO_LED, 0, 1, 2}
+    },
+
+    {
+        {  0,  0}, { 20,  0}, { 40,  0}, { 60,  0}, {80,  0}, {100,  0},
+        {  0, 16}, { 20, 16}, { 40, 16}, { 60, 16}, {80, 16}, {100, 16},
+        {  0, 32}, { 20, 32}, { 40, 32}, { 60, 32}, {80, 32}, {100, 32},
+        {  0, 48}, { 20, 48}, { 40, 48}, { 60, 48}, {80, 48}, {100, 48},
+        { 40, 64}, { 60, 64}, { 80, 64}
+    },
+
+    {
+        LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
+        LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
+        LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
+        LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
+        LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
+        LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
+        LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
+        LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT,
+        LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT, LED_FLAG_KEYLIGHT
+    }
+};
+
+#endif
+
+/* void keyboard_post_init_user(void) {
+    rgb_matrix_enable();
+    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    rgb_matrix_sethsv_noeeprom(43, 255, 120);
+} */
+
+#include QMK_KEYBOARD_H
+
+static uint16_t rainbow_hue = 0;
+
+bool rgb_matrix_indicators_user(void)
+{
+    for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; i++)
+    {
+        HSV hsv = {
+            .h = (rainbow_hue / 256 + (i * 255 / RGB_MATRIX_LED_COUNT)) & 0xFF,
+            .s = 255,
+            .v = rgb_matrix_get_val()
+        };
+
+        RGB rgb = hsv_to_rgb(hsv);
+
+        rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+    }
+
+    return false;
+}
+
+void housekeeping_task_user(void)
+{
+    static uint32_t timer = 0;
+
+    if (timer_elapsed32(timer) > 30)
+    {
+        timer = timer_read32();
+        rainbow_hue += 256;
+    }
+}
+
+
+#endif
+/* enum rgb_layers {
     RGB_LAYER_0,
     RGB_LAYER_1,
     RGB_LAYER_2,
@@ -171,4 +248,4 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     current_layer = get_highest_layer(state);
     rgb_render_state();
     return state;
-}
+} */

@@ -10,7 +10,8 @@
         "console": false,
         "extrakey": true,
         "mousekey": true,
-        "nkro": true
+        "nkro": true,
+        "rgb_matrix": true
     },
     "split": {
         "enabled": true,
@@ -28,6 +29,27 @@
         "device_version": "1.0.0",
         "pid": "0x1212",
         "vid": "0xFEED"
+    },
+    "ws2812": {
+        "pin": "GP27",
+        "driver": "vendor"
+    },
+
+    "rgb_matrix": {
+        "driver": "ws2812",
+        "split_count": [27, 27],
+
+        "animations": {
+            "solid_color": true,
+            "breathing": true,
+            "cycle_all": true,
+            "cycle_left_right": true,
+            "cycle_up_down": true,
+            "rainbow_moving_chevron": true,
+            "rainbow_beacon": true,
+            "solid_reactive_simple": true,
+            "solid_reactive": true
+        }
     },
     "layouts": {
         "LAYOUT": {
