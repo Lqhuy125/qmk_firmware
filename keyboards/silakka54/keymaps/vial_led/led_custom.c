@@ -70,28 +70,6 @@ static const uint16_t brightness_table[5] = {
     255
 };
 
-void led_init_user(void)
-{
-    uint8_t cfg = eeconfig_read_user();
-
-    rgb_level = cfg & RGB_CFG_LEVEL_MASK;
-
-    if (rgb_level > 4) {
-        rgb_level = 3;
-    }
-
-    if (cfg & RGB_CFG_ENABLE) {
-        rgb_matrix_enable();
-    } else {
-        rgb_matrix_disable();
-    }
-
-    rgb_matrix_sethsv(
-        43,
-        255,
-        brightness_table[rgb_level]
-    );
-}
 
 bool rgb_matrix_indicators_user(void)
 {
@@ -205,34 +183,25 @@ void eeconfig_init_user(void)
     save_rgb_config();
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record)
+void rgb_apply_config(uint8_t cfg)
 {
-    if (!record->event.pressed) {
-        return true;
+    rgb_level = cfg & RGB_CFG_LEVEL_MASK;
+
+    if (rgb_level > 4) {
+        rgb_level = 3;
     }
 
-    switch (keycode) {
-        case RGB_BRI_DEC:
-            rainbow_brightness_down();
-            return false;
-
-        case RGB_BRI_INC:
-            rainbow_brightness_up();
-            return false;
-
-        case RGB_SPD_DEC:
-            rainbow_speed_down();
-            return false;
-
-        case RGB_SPD_INC:
-            rainbow_speed_up();
-            return false;
-        case RGB_TOGGLE:
-            rgb_led_toggle();
-            return false;
+    if (cfg & RGB_CFG_ENABLE) {
+        rgb_matrix_enable();
+    } else {
+        rgb_matrix_disable();
     }
 
-    return true;
+    rgb_matrix_sethsv(
+        43,
+        255,
+        brightness_table[rgb_level]
+    );
 }
 
 #endif

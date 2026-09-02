@@ -5,4 +5,7 @@ LAYER_LOCK_ENABLE = yes
 
 RGB_MATRIX_ENABLE = yes
 # RGB_MATRIX_CUSTOM_USER = yes
-SRC += led_custom.c
+SRC += 	led_custom.c \
+		media_control.c \
+		ProcessTask.c
+
